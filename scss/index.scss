@@ -38,6 +38,7 @@ nav {
             background-color: rgba(128, 128, 128, 0.9);
             transition: top 500ms;
             color: white;
+            pointer-events: none;
         }        
 
         &:nth-child(even)::after{
@@ -51,6 +52,7 @@ nav {
             background-color: rgba(128, 128, 128, 0.9);
             transition: top 500ms;
             color: white;
+            pointer-events: none;
         }
 
         &:nth-child(1)::after{
