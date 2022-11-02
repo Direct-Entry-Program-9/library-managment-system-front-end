@@ -127,8 +127,77 @@ $("#btn-new-member").click(()=> {
     frmMemberDetail.show();
 });
 
-$("#frm-member-detail").submit(()=> alert('okay'));
+$("#frm-member-detail form").submit(()=> $("#btn-save").click());
 
 $("#btn-save").click(()=> {
-    alert('OK');
+
+    const name = $("#txt-name").val();
+    const address = $("#txt-address").val();
+    const contact = $("#txt-contact").val();
+    let validated = true;
+
+    $("#txt-name, #txt-address, #txt-contact").removeClass('is-invalid');
+
+    if (!/^\d{3}-\d{7}$/.test(contact)){
+        $("#txt-contact").addClass('is-invalid').select().focus();
+        validated = false;
+    }
+
+    if (!/^[A-Za-z0-9#|,./\-:;]+$/.test(address)){
+        $("#txt-address").addClass('is-invalid').select().focus();
+        validated = false;
+    }
+
+    if (!/^[A-Za-z ]+$/.test(name)){
+        $("#txt-name").addClass('is-invalid').select().focus();
+        validated = false;
+    }
+
+    if (!validated) return;
+
+    saveMember();
 });
+
+function saveMember(){
+    return new Promise((resolve, reject) => {
+        
+         setTimeout(()=> reject(), 2000);
+        setTimeout(()=> resolve(), 5000);
+
+    });
+}
+
+doSomething();
+
+async function doSomething(){
+    try{
+        await saveMember();
+        console.log("Promise una widihatama kalaa...");
+    }catch(e){
+        console.log("Promise eka kalea");
+    }
+}
+
+// function doSomething(){
+//     const promise = saveMember();
+//     console.log(promise);
+
+//     promise.then(()=> {
+//         console.log(promise);
+//         console.log("Kiwwa wagema kalaa...!");
+//     }).catch(()=> {
+//         console.log("Promise eka kalea...!");
+//     });
+
+//     promise.then(()=> {
+//         console.log("Working");
+//     }).catch(()=> {
+//         console.log("Awul");
+//     });
+
+//     promise.then(()=> {
+//         console.log("Working2");
+//     }).catch(()=> {
+//         console.log("Awul2");
+//     });
+// }
