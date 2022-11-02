@@ -23,59 +23,45 @@
             <div class="align-self-end px-1">Search members</div>
             <button class="btn btn-primary">+ New Member</button>
         </div>
-        <input type="text" class="form-control mt-2" placeholder="Enter id, name, address, contact number, etc. to search">
-        <table id="tbl-members" class="table table-hover mt-3">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>NAME</th>
-                    <th>ADDRESS</th>
-                    <th>CONTACT</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>M001</td>
-                    <td>Kasun Tharindu</td>
-                    <td>No: 112, Galle Road, Panadura</td>
-                    <td>078-1234567</td>
-                </tr>
-                <tr>
-                    <td>M002</td>
-                    <td>Pubudu Lakshan</td>
-                    <td>No: 112, Galle Road, Panadura</td>
-                    <td>078-1234567</td>
-                </tr>
-                <tr>
-                    <td>M003</td>
-                    <td>Nuwan Thushara</td>
-                    <td>No: 112, Galle Road, Panadura</td>
-                    <td>078-1234567</td>
-                </tr>
-                <tr>
-                    <td>M004</td>
-                    <td>Angelo Mathewews</td>
-                    <td>No: 112, Galle Road, Panadura</td>
-                    <td>078-1234567</td>
-                </tr>                                                
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4" class="text-center">
-                        No members to display, add a new member first.
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-        <nav class="d-flex justify-content-center">
+        <input id="txt-search" type="text" class="form-control mt-2" placeholder="Enter id, name, address, contact number, etc. to search">
+        <div class="table-responsive mt-3">
+            <table id="tbl-members" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>ADDRESS</th>
+                        <th>CONTACT</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">                                      
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No members to display, add a new member first.
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="loader">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <nav id="pagination" class="d-flex justify-content-center">
             <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
-          </nav>        
+        </nav>        
     </main>
+    <div class="toast-container bottom-0 end-0 me-2 mb-3">
+        <div id="toast" class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+            <div class="toast-body">
+                Failed to load members, try refreshing again!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
