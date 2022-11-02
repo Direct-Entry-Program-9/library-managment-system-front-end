@@ -117,5 +117,18 @@ $(document).keydown((eventData)=>{
 $("#btn-new-member").click(()=> {
     const frmMemberDetail = new 
                 bootstrap.Modal(document.getElementById('frm-member-detail'));
+
+    $("#frm-member-detail")
+        .addClass('new')
+        .on('shown.bs.modal', ()=> {
+            $("#txt-name").focus();
+        });
+
     frmMemberDetail.show();
+});
+
+$("#frm-member-detail").submit(()=> alert('okay'));
+
+$("#btn-save").click(()=> {
+    alert('OK');
 });

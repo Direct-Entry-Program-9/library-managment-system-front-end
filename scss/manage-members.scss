@@ -133,17 +133,17 @@ header{
       display: none;
     }
 
-    #btn-new{
+    #btn-save{
       display: inline !important;
     }
 
-    .modal-body > div:first-child {
+    .modal-body form > div:first-child {
       display: none;
     }
   }
 
   &.edit{
-    #btn-edit, #btn-new{
+    #btn-edit, #btn-save{
        display: none;
     }
 
