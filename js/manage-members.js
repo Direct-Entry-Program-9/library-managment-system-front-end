@@ -113,3 +113,9 @@ $(document).keydown((eventData)=>{
         $("#txt-search").focus();
     }
 });
+
+$("#btn-new-member").click(()=> {
+    const frmMemberDetail = new 
+                bootstrap.Modal(document.getElementById('frm-member-detail'));
+    frmMemberDetail.show();
+});
