@@ -1,3 +1,4 @@
+const API_END_POINT = 'http://34.100.220.186:8080/lms/api';
 const pageSize = 8;
 let page = 1;
 
@@ -40,7 +41,7 @@ function getMembers(query=`${$('#txt-search').val()}`){
     });
 
     /* (3) Open the request */
-    http.open('GET', `http://localhost:8080/lms/api/members?size=${pageSize}&page=${page}&q=${query}`, true);
+    http.open('GET', `${API_END_POINT}/members?size=${pageSize}&page=${page}&q=${query}`, true);
 
     /* (4) Set additional infromation for the request */
 
@@ -187,7 +188,7 @@ function saveMember(){
             }
         });
 
-        xhr.open('POST', 'http://localhost:8080/lms/api/members', true);
+        xhr.open('POST', `${API_END_POINT}/members`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         const member = {
