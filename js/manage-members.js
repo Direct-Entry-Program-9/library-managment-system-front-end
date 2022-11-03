@@ -167,7 +167,7 @@ $("#btn-save").click(async ()=> {
         $("#txt-name").focus();
     }catch(e){
         $("#overlay").addClass("d-none");
-        showToast("Failed to save the member, try again");
+        showToast("Failed to save the member, try again", 'error');
         $("#txt-name").focus();
     }
     
@@ -220,3 +220,7 @@ function showToast(msg, msgType = 'warning'){
     $("#toast .toast-body").text(msg);
     $("#toast").toast('show');
 }
+
+$("#frm-member-detail").on('hidden.bs.modal', ()=> {
+    getMembers();
+});
