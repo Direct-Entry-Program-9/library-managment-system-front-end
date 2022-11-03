@@ -127,9 +127,12 @@ $("#btn-new-member").click(()=> {
     frmMemberDetail.show();
 });
 
-$("#frm-member-detail form").submit(()=> $("#btn-save").click());
+$("#frm-member-detail form").submit((eventData)=> {
+    eventData.preventDefault();
+    $("#btn-save").click();
+});
 
-$("#btn-save").click(()=> {
+$("#btn-save").click(async ()=> {
 
     const name = $("#txt-name").val();
     const address = $("#txt-address").val();
@@ -143,7 +146,7 @@ $("#btn-save").click(()=> {
         validated = false;
     }
 
-    if (!/^[A-Za-z0-9#|,./\-:;]+$/.test(address)){
+    if (!/^[A-Za-z0-9|,.:;#\/\\-]+$/.test(address)){
         $("#txt-address").addClass('is-invalid').select().focus();
         validated = false;
     }
@@ -155,49 +158,40 @@ $("#btn-save").click(()=> {
 
     if (!validated) return;
 
-    saveMember();
+    try{
+        await saveMember();
+        alert("Saved successfully");
+    }catch(e){
+        alert("Failed to save the member");
+    }
+    
 });
 
 function saveMember(){
     return new Promise((resolve, reject) => {
-        
-         setTimeout(()=> reject(), 2000);
-        setTimeout(()=> resolve(), 5000);
+        const xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('readystatechange', ()=> {
+            if (xhr.readyState === XMLHttpRequest.DONE){
+                if (xhr.status === 201){
+                    resolve();
+                }else{
+                    reject();
+                }
+            }
+        });
+
+        xhr.open('POST', 'http://localhost:8080/lms/api/members', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        const member = {
+            name: $("#txt-name").val(),
+            address: $("#txt-address").val(),
+            contact: $("#txt-contact").val()
+        }
+
+        xhr.send(JSON.stringify(member));
 
     });
 }
 
-doSomething();
-
-async function doSomething(){
-    try{
-        await saveMember();
-        console.log("Promise una widihatama kalaa...");
-    }catch(e){
-        console.log("Promise eka kalea");
-    }
-}
-
-// function doSomething(){
-//     const promise = saveMember();
-//     console.log(promise);
-
-//     promise.then(()=> {
-//         console.log(promise);
-//         console.log("Kiwwa wagema kalaa...!");
-//     }).catch(()=> {
-//         console.log("Promise eka kalea...!");
-//     });
-
-//     promise.then(()=> {
-//         console.log("Working");
-//     }).catch(()=> {
-//         console.log("Awul");
-//     });
-
-//     promise.then(()=> {
-//         console.log("Working2");
-//     }).catch(()=> {
-//         console.log("Awul2");
-//     });
-// }
