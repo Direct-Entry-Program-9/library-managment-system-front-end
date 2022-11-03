@@ -34,7 +34,7 @@ function getMembers(query=`${$('#txt-search').val()}`){
                     $('#tbl-members tbody').append(rowHtml);
                 });
             }else{
-                $("#toast").toast('show');
+                showToast('Failed to load members, try refreshing again');
             }
         }
     });
@@ -146,7 +146,7 @@ $("#btn-save").click(async ()=> {
         validated = false;
     }
 
-    if (!/^[A-Za-z0-9|,.:;#\/\\-]+$/.test(address)){
+    if (!/^[A-Za-z0-9|,.:;#\/\\ -]+$/.test(address)){
         $("#txt-address").addClass('is-invalid').select().focus();
         validated = false;
     }
@@ -159,10 +159,16 @@ $("#btn-save").click(async ()=> {
     if (!validated) return;
 
     try{
-        await saveMember();
-        alert("Saved successfully");
+        $("#overlay").removeClass("d-none");
+        const {id} = await saveMember();
+        $("#overlay").addClass("d-none");
+        showToast(`Member has been saved successfully with the ID: ${id}`, 'success');
+        $("#txt-name, #txt-address, #txt-contact").val("");
+        $("#txt-name").focus();
     }catch(e){
-        alert("Failed to save the member");
+        $("#overlay").addClass("d-none");
+        showToast("Failed to save the member, try again");
+        $("#txt-name").focus();
     }
     
 });
@@ -174,7 +180,7 @@ function saveMember(){
         xhr.addEventListener('readystatechange', ()=> {
             if (xhr.readyState === XMLHttpRequest.DONE){
                 if (xhr.status === 201){
-                    resolve();
+                    resolve(JSON.parse(xhr.responseText));
                 }else{
                     reject();
                 }
@@ -195,3 +201,22 @@ function saveMember(){
     });
 }
 
+function showToast(msg, msgType = 'warning'){
+    $("#toast").removeClass('text-bg-warning')
+        .removeClass('text-bg-primary')
+        .removeClass('text-bg-error')
+        .removeClass('text-bg-success');
+
+    if (msgType === 'success'){
+        $("#toast").addClass('text-bg-success');
+    }else if (msgType === 'error'){
+        $("#toast").addClass('text-bg-error');
+    }else if(msgType === 'info'){
+        $("#toast").addClass('text-bg-primary');
+    }else {
+        $("#toast").addClass('text-bg-warning');
+    }
+
+    $("#toast .toast-body").text(msg);
+    $("#toast").toast('show');
+}
