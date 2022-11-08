@@ -1,4 +1,5 @@
-const API_END_POINT = 'http://34.100.220.186:8080/lms/api';
+// const API_END_POINT = 'http://34.100.220.186:8080/lms/api';
+const API_END_POINT = 'http://localhost:8080/lms/api';
 const pageSize = 8;
 let page = 1;
 
@@ -225,3 +226,45 @@ function showToast(msg, msgType = 'warning'){
 $("#frm-member-detail").on('hidden.bs.modal', ()=> {
     getMembers();
 });
+
+$('#tbl-members tbody').click(({target})=> {
+    if (!target) return;
+    let rowElm = null;
+    if (target instanceof HTMLTableRowElement) {
+        rowElm = target;
+    }else if(target instanceof HTMLTableCellElement){
+        rowElm = target.parentElement;
+    }else{
+        return;
+    }
+
+    getMemeberDetails($(rowElm.cells[0]).text());
+});
+
+function getMemeberDetails(memberId){
+    const http = new XMLHttpRequest();
+    http.addEventListener('readystatechange', ()=> {
+        if (http.readyState === XMLHttpRequest.DONE){
+            if (http.status === 200){
+                const member = JSON.parse(http.responseText);
+
+                const frmMemberDetail = new 
+                bootstrap.Modal(document.getElementById('frm-member-detail'));
+
+                $("#frm-member-detail")
+                    .removeClass('new');
+
+                $("#txt-id").val(member.id);
+                $("#txt-name").val(member.name);
+                $("#txt-address").val(member.address);
+                $("#txt-contact").val(member.contact);
+
+                frmMemberDetail.show();
+            }else{
+                showToast('Failed to fetch the member details');
+            }
+        }
+    });
+    http.open('GET', `${API_END_POINT}/members/${memberId}`, true);
+    http.send();
+}
