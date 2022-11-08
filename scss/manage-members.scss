@@ -55,6 +55,10 @@ header{
     tbody tr:focus{
       background-color: rgb(241, 241, 241);
     }
+
+    tbody tr{
+      cursor: pointer;
+    }
 }
 
 #loader{

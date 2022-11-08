@@ -52,6 +52,11 @@ function getMembers(query=`${$('#txt-search').val()}`){
 
 function initPagination(totalMembers){
     const totalPages = Math.ceil(totalMembers / pageSize);
+    if (page > totalPages) {
+        page = totalPages;
+        getMembers();
+        return;
+    }
     
     if (totalPages <= 1){
         $("#pagination").addClass('d-none');
@@ -120,7 +125,10 @@ $("#btn-new-member").click(()=> {
     const frmMemberDetail = new 
                 bootstrap.Modal(document.getElementById('frm-member-detail'));
 
+    $("#txt-id, #txt-name, #txt-address, #txt-contact").attr('disabled', false).val('');                
+
     $("#frm-member-detail")
+        .removeClass('edit')
         .addClass('new')
         .on('shown.bs.modal', ()=> {
             $("#txt-name").focus();
@@ -229,42 +237,91 @@ $("#frm-member-detail").on('hidden.bs.modal', ()=> {
 
 $('#tbl-members tbody').click(({target})=> {
     if (!target) return;
-    let rowElm = null;
-    if (target instanceof HTMLTableRowElement) {
-        rowElm = target;
-    }else if(target instanceof HTMLTableCellElement){
-        rowElm = target.parentElement;
-    }else{
-        return;
-    }
+    let rowElm = target.closest('tr');
+    // if (target instanceof HTMLTableRowElement) {
+    //     rowElm = target;
+    // }else if(target instanceof HTMLTableCellElement){
+    //     rowElm = target.parentElement;
+    // }else{
+    //     return;
+    // }
 
     getMemeberDetails($(rowElm.cells[0]).text());
 });
 
-function getMemeberDetails(memberId){
-    const http = new XMLHttpRequest();
-    http.addEventListener('readystatechange', ()=> {
-        if (http.readyState === XMLHttpRequest.DONE){
-            if (http.status === 200){
-                const member = JSON.parse(http.responseText);
+async function getMemeberDetails(memberId){
+    try{
+        const response = await fetch(`${API_END_POINT}/members/${memberId}`)
+        if (response.ok){
+            const member = await response.json(); 
+            
+            const frmMemberDetail = new 
+            bootstrap.Modal(document.getElementById('frm-member-detail'));
 
-                const frmMemberDetail = new 
-                bootstrap.Modal(document.getElementById('frm-member-detail'));
+            $("#frm-member-detail")
+                .removeClass('new').removeClass('edit');
 
-                $("#frm-member-detail")
-                    .removeClass('new');
+            $("#txt-id").attr('disabled', 'true').val(member.id);
+            $("#txt-name").attr('disabled', 'true').val(member.name);
+            $("#txt-address").attr('disabled', 'true').val(member.address);
+            $("#txt-contact").attr('disabled', 'true').val(member.contact);
 
-                $("#txt-id").val(member.id);
-                $("#txt-name").val(member.name);
-                $("#txt-address").val(member.address);
-                $("#txt-contact").val(member.contact);
-
-                frmMemberDetail.show();
-            }else{
-                showToast('Failed to fetch the member details');
-            }
+            frmMemberDetail.show();
+        }else{
+            throw new Error(response.status);
         }
-    });
-    http.open('GET', `${API_END_POINT}/members/${memberId}`, true);
-    http.send();
+    }catch(error){
+        showToast('Failed to fetch the member details');
+    }
+
+
+
+    // const http = new XMLHttpRequest();
+    // http.addEventListener('readystatechange', ()=> {
+    //     if (http.readyState === XMLHttpRequest.DONE){
+    //         if (http.status === 200){
+    //             const member = JSON.parse(http.responseText);
+
+    //             const frmMemberDetail = new 
+    //             bootstrap.Modal(document.getElementById('frm-member-detail'));
+
+    //             $("#frm-member-detail")
+    //                 .removeClass('new');
+
+    //             $("#txt-id").attr('disabled', 'true').val(member.id);
+    //             $("#txt-name").attr('disabled', 'true').val(member.name);
+    //             $("#txt-address").attr('disabled', 'true').val(member.address);
+    //             $("#txt-contact").attr('disabled', 'true').val(member.contact);
+
+    //             frmMemberDetail.show();
+    //         }else{
+    //             showToast('Failed to fetch the member details');
+    //         }
+    //     }
+    // });
+    // http.open('GET', `${API_END_POINT}/members/${memberId}`, true);
+    // http.send();
 }
+
+$("#btn-edit").click(()=> {
+    $("#frm-member-detail").addClass('edit');
+    $("#txt-name, #txt-address, #txt-contact").attr('disabled', false);
+});
+
+$("#btn-delete").click(async ()=> {
+    $("#overlay").removeClass("d-none");
+    try{
+        const response = await fetch(`${API_END_POINT}/members/${$('#txt-id').val()}`, 
+                            {method: 'DELETE'});
+        if (response.status === 204){
+            showToast('Member has been deleted successfully', 'success');
+            $("#btn-close").click();
+        }else{
+            throw new Error(response.status);
+        }
+    }catch(error){
+        showToast("Failed to delete the member, try again!");
+    }finally{
+        $("#overlay").addClass("d-none");
+    }
+});
