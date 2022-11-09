@@ -1,5 +1,5 @@
-// const API_END_POINT = 'http://34.100.220.186:8080/lms/api';
-const API_END_POINT = 'http://localhost:8080/lms/api';
+const API_END_POINT = 'http://34.100.220.186:8080/lms/api';
+// const API_END_POINT = 'http://localhost:8080/lms/api';
 const pageSize = 8;
 let page = 1;
 
@@ -112,6 +112,11 @@ $('#tbl-books tbody').keyup((eventData)=>{
         const elm = document.activeElement.nextElementSibling;
         if (elm instanceof HTMLTableRowElement){
             elm.focus();
+        }
+    }else if (eventData.which === 13){
+        const elm = document.activeElement;
+        if (elm instanceof HTMLTableRowElement)   {
+            elm.click();
         }
     }
 });
