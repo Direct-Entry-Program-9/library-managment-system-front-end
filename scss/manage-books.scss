@@ -18,8 +18,8 @@ header{
 #tbl-books{
     th:first-child,
     tbody td:first-child{
-      max-width: 170px;
-      min-width: 110px;
+      max-width: 90px;
+      min-width: 90px;
       word-break: keep-all;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -39,8 +39,8 @@ header{
 
     th:last-child,
     tbody td:last-child{
-        width: 150px;
-        min-width: 150px;
+        width: 80px;
+        min-width: 80px;
         text-align: center;
     } 
     
@@ -53,7 +53,8 @@ header{
     }
 
     tbody tr:focus{
-      background-color: rgb(241, 241, 241);
+      background-color: rgb(231, 239, 255);
+      outline-color: rgb(151, 151, 151);
     }
 
     tbody tr{
